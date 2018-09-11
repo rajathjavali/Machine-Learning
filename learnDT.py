@@ -130,6 +130,8 @@ class LearnDT:
         # print("in node: " + node.attribute_val + " depth: " + str(tree_depth))
         if len(new_attributes) != 0:
             tree_node.set_choices(choices)
+            tree_node.children["other"] = node.Node(node.NodeType.LABEL)
+            tree_node.children["other"].attribute_val = self.__best_label_finder(data_set)
             for i in choices:
                 # modify data set and attribute set
                 new_data_set = []
@@ -178,7 +180,10 @@ class LearnDT:
             return tree_node.attribute_val
         choice = data_line[self.column_index_map[tree_node.attribute_val]]
         # print(node.attribute_val + " Choice: " + str(choice))
-        return self.__check_decision_tree(tree_node.children[choice], data_line)
+        if choice in tree_node.children:
+            return self.__check_decision_tree(tree_node.children[choice], data_line)
+        else:
+            return  self.__check_decision_tree(tree_node.children["other"], data_line)
 
     # public facing api which takes in a data set uses the ID3 decision tree build on the training set
     # to make a decision on the data lines and also calculates the accuracy of the tree
