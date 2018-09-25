@@ -147,6 +147,7 @@ class LearnDT:
             tree_node.children["label"] = node.Node(node.NodeType.LABEL)
             tree_node.children["label"].attribute_val = self.__best_label_finder(data_set)
 
+    # finds the max depth of the tree
     def max_depth_id3(self, tree_node):
         if tree_node.type == node.NodeType.LABEL:
             return 0
@@ -183,7 +184,7 @@ class LearnDT:
         if choice in tree_node.children:
             return self.__check_decision_tree(tree_node.children[choice], data_line)
         else:
-            return  self.__check_decision_tree(tree_node.children["other"], data_line)
+            return self.__check_decision_tree(tree_node.children["other"], data_line)
 
     # public facing api which takes in a data set uses the ID3 decision tree build on the training set
     # to make a decision on the data lines and also calculates the accuracy of the tree
