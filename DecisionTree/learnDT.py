@@ -1,6 +1,6 @@
 import math
 import copy
-import node
+import DecisionTree.node as node
 
 
 class LearnDT:

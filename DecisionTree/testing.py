@@ -1,6 +1,6 @@
 # Following are some of the test cases for analysis and reporting:
-import data
-import learnDT
+import DecisionTree.data as data
+import DecisionTree.learnDT as learnDT
 import math
 import numpy as np
 
