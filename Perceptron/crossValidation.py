@@ -91,6 +91,7 @@ def training_simple_perceptron():
     simple_perceptron = sP.SimplePerceptron(train_data_set.raw_data, train_data_set.max_variable)
     weights, num_updates, epoch_accuracies = simple_perceptron.run_perceptron(final_epoch, max_learning_rate, dev_data.raw_data)
     print("Total Updates on Train set: " + str(num_updates))
+    print("Accuracy on Dev set: " + str(helper.model_accuracy(dev_data.raw_data, weights)))
     print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
 
 
@@ -124,7 +125,7 @@ def training_decayl_perceptron():
                                                                      train_data_set.max_variable)
     weights, num_updates, epoch_accuracies = decay_learning_perceptron.run_perceptron(final_epoch, max_learning_rate, dev_data.raw_data)
     print("Total Updates on Train set: " + str(num_updates))
-
+    print("Accuracy on Dev set: " + str(helper.model_accuracy(dev_data.raw_data, weights)))
     print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
 
 
@@ -164,6 +165,7 @@ def training_margin_perceptron():
     weights, num_updates, epoch_accuracies = \
         margin_perceptron.run_perceptron(final_epoch, best_margin_value, max_learning_rate, dev_data.raw_data)
     print("Total Updates on Train set: " + str(num_updates))
+    print("Accuracy on Dev set: " + str(helper.model_accuracy(dev_data.raw_data, weights)))
     print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
 
 
@@ -200,6 +202,7 @@ def training_average_perceptron():
     weights, num_updates, epoch_accuracies = \
         average_perceptron.run_perceptron(final_epoch, max_learning_rate, dev_data.raw_data)
     print("Total Updates on Train set: " + str(num_updates))
+    print("Accuracy on Dev set: " + str(helper.model_accuracy(dev_data.raw_data, weights)))
     print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
 
 
@@ -235,6 +238,7 @@ def training_aggressive_margin_perceptron():
     weights, num_updates, epoch_accuracies = \
         aggressive_margin_perceptron.run_perceptron(final_epoch, best_margin_value, dev_data.raw_data)
     print("Total Updates on Train set: " + str(num_updates))
+    print("Accuracy on Dev set: " + str(helper.model_accuracy(dev_data.raw_data, weights)))
     print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
 
 
