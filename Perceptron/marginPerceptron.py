@@ -13,7 +13,7 @@ class MarginPerceptron:
         random_data = helper.data_randomizer(data)
         for index in random_data:
             line = data[index]
-            WX = helper.vector_multiply(self.weights, line)
+            WX = helper.vector_dict_multiply(self.weights, line)
             label = int(line["label"])
             # checking whether the prediction made is correct or not
             if WX * label <= margin_value:
@@ -34,14 +34,27 @@ class MarginPerceptron:
         max_epoch_accuracy = 0
         max_accuracy_weights = []
         time_step = 0
+        num_updates = []
+        best_position = 0
+        position = 0
+
         for i in range(0, epoch):
-            _, time_step = self.margin_perceptron(self.data, margin_value, time_step, learning_rate)
+            updates, time_step = self.margin_perceptron(self.data, margin_value, time_step, learning_rate)
+            num_updates.append(updates)
             if testing_data is not None:
                 accuracy = helper.model_accuracy(testing_data, self.weights)
                 epoch_accuracies.append(accuracy)
                 if max_epoch_accuracy < accuracy:
                     max_epoch_accuracy = accuracy
+                    best_position = position
                     max_accuracy_weights = list(self.weights)
+                position += 1
         if testing_data is not None:
-            return max_accuracy_weights, epoch_accuracies
+            total_updates = 0
+            for i, v in enumerate(num_updates):
+                total_updates += v
+                if i == best_position:
+                    break
+
+            return max_accuracy_weights, total_updates, epoch_accuracies
         return self.weights

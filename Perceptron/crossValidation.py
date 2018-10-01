@@ -4,6 +4,7 @@ import Perceptron.marginPerceptron as mP
 import Perceptron.simplePerceptron as sP
 import Perceptron.averagePerceptron as aP
 import Perceptron.decayLearningPerceptron as dLP
+import Perceptron.aggressiveMarginPerceptron as aMP
 
 
 def avg (vector):
@@ -56,6 +57,10 @@ def basic_working_test():
     weights = decay_learning_perceptron.run_perceptron(epoch, 1)
     print("Decay Learning Perceptron: " + str(helper.model_accuracy(seperable_data.raw_data, weights)))
 
+    aggressive_margin_perceptron = aMP.AggressiveMarginPerceptron(seperable_data.raw_data, seperable_data.max_variable)
+    weights = aggressive_margin_perceptron.run_perceptron(epoch, 1)
+    print("Aggressive Margin Perceptron: " + str(helper.model_accuracy(seperable_data.raw_data, weights)))
+
 
 def training_simple_perceptron():
     print("-------------------------------------Simple Perceptron----------------------------------")
@@ -84,7 +89,8 @@ def training_simple_perceptron():
 
     final_epoch = 20
     simple_perceptron = sP.SimplePerceptron(train_data_set.raw_data, train_data_set.max_variable)
-    weights, epoch_accuracies = simple_perceptron.run_perceptron(final_epoch, max_learning_rate, dev_data.raw_data)
+    weights, num_updates, epoch_accuracies = simple_perceptron.run_perceptron(final_epoch, max_learning_rate, dev_data.raw_data)
+    print("Total Updates on Train set: " + str(num_updates))
     print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
 
 
@@ -116,7 +122,9 @@ def training_decayl_perceptron():
     final_epoch = 20
     decay_learning_perceptron = dLP.DecayLearningPercepton(train_data_set.raw_data,
                                                                      train_data_set.max_variable)
-    weights, epoch_accuracies = decay_learning_perceptron.run_perceptron(final_epoch, max_learning_rate, dev_data.raw_data)
+    weights, num_updates, epoch_accuracies = decay_learning_perceptron.run_perceptron(final_epoch, max_learning_rate, dev_data.raw_data)
+    print("Total Updates on Train set: " + str(num_updates))
+
     print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
 
 
@@ -153,8 +161,9 @@ def training_margin_perceptron():
     margin_perceptron = \
         mP.MarginPerceptron(train_data_set.raw_data, train_data_set.max_variable)
 
-    weights, epoch_accuracies = \
+    weights, num_updates, epoch_accuracies = \
         margin_perceptron.run_perceptron(final_epoch, best_margin_value, max_learning_rate, dev_data.raw_data)
+    print("Total Updates on Train set: " + str(num_updates))
     print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
 
 
@@ -162,7 +171,6 @@ def training_average_perceptron():
     print("-------------------------------------Average Perceptron---------------------------------")
     max_accuracy = 0
     max_learning_rate = 0
-    best_margin_value = 0
     for learning_rate in learning_rate_set:
         # print("\n--------------------------------Learning Rate: "
         # + str(learning_rate) + "---------------------------\n")
@@ -183,21 +191,93 @@ def training_average_perceptron():
 
     # print("\n-----------------------------------------------------------------------------------")
     print("Average Perceptron Max Accurary: " + str(max_accuracy) + " at learning rate: "
-          + str(max_learning_rate) + " and margin: " + str(best_margin_value))
+          + str(max_learning_rate))
 
     final_epoch = 20
     average_perceptron = \
         aP.AveragePerceptron(train_data_set.raw_data, train_data_set.max_variable)
 
-    weights, epoch_accuracies = \
+    weights, num_updates, epoch_accuracies = \
         average_perceptron.run_perceptron(final_epoch, max_learning_rate, dev_data.raw_data)
+    print("Total Updates on Train set: " + str(num_updates))
     print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
 
 
-# training_simple_perceptron()
-# training_decayl_perceptron()
-# training_margin_perceptron()
-# training_average_perceptron()
+def training_aggressive_margin_perceptron():
+    print("------------------------------Aggressive Margin Perceptron---------------------------------")
+    max_accuracy = 0
+    best_margin_value = 0
+    for margin_value in margin_value_set:
+        # print("\n--------------------------------Learning Rate: "
+        # + str(learning_rate) + "---------------------------\n")
 
+        accuracies = []
+
+        for test_set_num, data_set in enumerate(data_sets):
+            aggressive_margin_perceptron = \
+                aMP.AggressiveMarginPerceptron(data_set, train_data_set.max_variable)
+            weights = aggressive_margin_perceptron.run_perceptron(epoch, margin_value)
+            accuracies.append(helper.model_accuracy(folds[test_set_num].raw_data, weights))
+
+        # print(accuracies)
+        average = avg(accuracies)
+        if average > max_accuracy:
+            max_accuracy = average
+            best_margin_value = margin_value
+
+    # print("\n-----------------------------------------------------------------------------------")
+    print("Aggressive Margin Perceptron Max Accurary: " + str(max_accuracy) + " at margin: " + str(best_margin_value))
+
+    final_epoch = 20
+    aggressive_margin_perceptron = \
+        aMP.AggressiveMarginPerceptron(train_data_set.raw_data, train_data_set.max_variable)
+
+    weights, num_updates, epoch_accuracies = \
+        aggressive_margin_perceptron.run_perceptron(final_epoch, best_margin_value, dev_data.raw_data)
+    print("Total Updates on Train set: " + str(num_updates))
+    print("Accuracy on Test set: " + str(helper.model_accuracy(test_data_set.raw_data, weights)))
+
+
+def majority_classifier():
+    train_label_dict = {}
+    for line in train_data_set.raw_data:
+        label = line["label"]
+        if label in train_label_dict:
+            train_label_dict[label] += 1
+        else:
+            train_label_dict[label] = 1
+    max_label = ' '
+    max_value = 0
+    print("--------------------------------Majority Classifier---------------------------------")
+    for k, v in train_label_dict.items():
+        # print("label: " + k + " value: " + str(v))
+        if max_value < v:
+            max_value = v
+            max_label = k
+    print("Majority classifier prediction: " + max_label)
+    dev_accuracy = 0
+    for line in dev_data.raw_data:
+        label = line["label"]
+        if label == max_label:
+            dev_accuracy += 1
+    dev_accuracy /= len(dev_data.raw_data)
+    print("Dev Accuracy with Majority classifier: " + str(dev_accuracy))
+
+    test_accuracy = 0
+    for line in test_data_set.raw_data:
+        label = line["label"]
+        if label == max_label:
+            test_accuracy += 1
+
+    test_accuracy /= len(test_data_set.raw_data)
+    print("Test Accuracy with Majority classifier: " + str(test_accuracy))
+
+
+majority_classifier()
+training_simple_perceptron()
+training_decayl_perceptron()
+training_margin_perceptron()
+training_average_perceptron()
+training_aggressive_margin_perceptron()
 
 # basic_working_test()

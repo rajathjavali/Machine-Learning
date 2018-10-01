@@ -16,7 +16,7 @@ def count_mistakes(data, weights):
     mistakes = 0
     if len(weights) != 0:
         for line in data:
-            WX = vector_multiply(weights, line)
+            WX = vector_dict_multiply(weights, line)
             label = int(line["label"])
 
             if WX * label <= 0:
@@ -34,7 +34,7 @@ def random_weight_vector(max_column):
     return weights
 
 
-def vector_multiply(weights, data_line):
+def vector_dict_multiply(weights, data_line):
     # weight vector transpose * input vector
     mul_result = 0
     for key, value in data_line.items():
