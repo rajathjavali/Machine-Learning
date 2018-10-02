@@ -5,7 +5,7 @@ import simplePerceptron as sP
 import averagePerceptron as aP
 import decayLearningPerceptron as dLP
 import aggressiveMarginPerceptron as aMP
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 def avg (vector):
@@ -37,16 +37,17 @@ data_sets = [
 ]
 
 epoch = 10
-plot = True
+plot = False
 
 
 def plot_graph(accuracy):
+    print("Plotting Graph")
     # x = list(range(0, 20))
     # x = [i for i in range(1, 21)]
-    plt.plot(range(1, 21), accuracy)
-    plt.ylabel('epoch accuracy')
-    plt.xlabel('epoch')
-    plt.show()
+    # plt.plot(range(1, 21), accuracy)
+    # plt.ylabel('epoch accuracy')
+    # plt.xlabel('epoch')
+    # plt.show()
 
 
 def basic_working_test():
