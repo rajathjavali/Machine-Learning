@@ -1,4 +1,4 @@
-import Perceptron.helper as helper
+import helper
 
 
 class DecayLearningPercepton:
@@ -8,9 +8,9 @@ class DecayLearningPercepton:
         self.max_variable = max_variable
         self.weights = helper.random_weight_vector(max_variable)
 
-    def decay_learning_perceptron(self, data, time_step, learning_rate):
+    def decay_learning_perceptron(self, data, time_step, learning_rate, seed):
         num_updates = 0
-        random_data = helper.data_randomizer(data)
+        random_data = helper.data_randomizer(data, seed)
         for index in random_data:
             line = data[index]
             WX = helper.vector_dict_multiply(self.weights, line)
@@ -38,7 +38,7 @@ class DecayLearningPercepton:
         best_position = 0
         position = 0
         for i in range(0, epoch):
-            updates, time_step = self.decay_learning_perceptron(self.data, time_step, learning_rate)
+            updates, time_step = self.decay_learning_perceptron(self.data, time_step, learning_rate, i+1)
             num_updates.append(updates)
             if testing_data is not None:
                 accuracy = helper.model_accuracy(testing_data, self.weights)

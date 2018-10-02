@@ -1,4 +1,4 @@
-import Perceptron.helper as helper
+import helper
 
 
 class SimplePerceptron:
@@ -8,9 +8,9 @@ class SimplePerceptron:
         self.max_variable = max_variable
         self.weights = helper.random_weight_vector(max_variable)
 
-    def simple_perceptron(self, data, learning_rate):
+    def simple_perceptron(self, data, learning_rate, seed):
         num_updates = 0
-        random_data = helper.data_randomizer(data)
+        random_data = helper.data_randomizer(data, seed)
         for index in random_data:
             line = data[index]
             WX = helper.vector_dict_multiply(self.weights, line)
@@ -35,7 +35,7 @@ class SimplePerceptron:
         best_position = 0
         position = 0
         for i in range(0, epoch):
-            num_updates.append(self.simple_perceptron(self.data, learning_rate))
+            num_updates.append(self.simple_perceptron(self.data, learning_rate, i+1))
             if testing_data is not None:
                 accuracy = helper.model_accuracy(testing_data, self.weights)
                 epoch_accuracies.append(accuracy)

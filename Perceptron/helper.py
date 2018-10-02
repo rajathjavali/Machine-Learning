@@ -1,13 +1,13 @@
 import random
 
 
-def data_randomizer(data):
+def data_randomizer(data, seed=4):
     # num_data_lines = len(data)
     # random selection of data line without repetition - shuffling of data
     # random_data = random.sample(range(0, num_data_lines), num_data_lines - 1)
     # return random_data
     data_indexes = list(range(0, len(data)))
-    random.seed(6)
+    random.seed(seed)
     random.shuffle(data_indexes)
     return data_indexes
 

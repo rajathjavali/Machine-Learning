@@ -1,0 +1,30 @@
+\section{Warm up: Linear Classifiers and Boolean Functions}\label{sec:q1}
+
+[10 points] Please indicate if each of the following boolean functions is linearly separable.
+If it is linearly separable, write down a linear threshold unit equivalent to it.
+
+Assuming true = 1 and false = -1
+\begin{enumerate}
+\item~[2 points] $\neg x_1\vee x_2\vee\neg x_3$\\
+Linearly separable \\$- x_1 + x_2 - x_3 \ge -1$
+
+\item~[2 points] $(x_1\vee x_2)\wedge x_3$\\
+Linearly separable \\$x_1 + x_2 + 2x_3 \ge 2$
+
+\item~[2 points] $(x_1\wedge\neg x_2)\vee \neg x_3$\\
+Linearly separable \\
+$x_1 - x_2 - x_3 \ge 1$
+\item~[2 points] $x_1\text{ xor } x_2\text{ xor }x_3$\\
+Not linearly separable
+\item~[2 points] $x_1 \wedge \neg x_2\wedge x_3$\\
+Linearly separable \\
+$x_1 - x_2 + x_3 \ge 3$
+\end{enumerate}
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "hw2"
+%%% End:
