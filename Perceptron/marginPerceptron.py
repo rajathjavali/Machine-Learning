@@ -18,14 +18,14 @@ class MarginPerceptron:
             # checking whether the prediction made is correct or not
             if WX * label <= margin_value:
                 num_updates += 1
-                learning_rate /= (1 + time_step)
+                new_learning_rate = float(learning_rate) / (1 + time_step)
                 # modifying weights on wrong prediction
                 for i in range(len(self.weights)):
                     if i == 0:
-                        self.weights[0] += learning_rate * label
+                        self.weights[0] += new_learning_rate * label
                     elif str(i) in line:
-                        self.weights[i] += learning_rate * label * float(line[str(i)])
-                time_step += 1
+                        self.weights[i] += new_learning_rate * label * float(line[str(i)])
+            time_step += 1
 
         return num_updates, time_step
 
