@@ -1,10 +1,10 @@
-import helper as helper
-import readData as readData
-import marginPerceptron as mP
-import simplePerceptron as sP
-import averagePerceptron as aP
-import decayLearningPerceptron as dLP
-import aggressiveMarginPerceptron as aMP
+import Perceptron.helper as helper
+import Perceptron.readData as readData
+import Perceptron.marginPerceptron as mP
+import Perceptron.simplePerceptron as sP
+import Perceptron.averagePerceptron as aP
+import Perceptron.decayLearningPerceptron as dLP
+import Perceptron.aggressiveMarginPerceptron as aMP
 # import matplotlib.pyplot as plt
 
 
