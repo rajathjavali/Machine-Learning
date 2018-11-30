@@ -1,0 +1,205 @@
+\section{Experiments}\label{sec:q2}
+
+For this question, you will have to implement and compare different
+learning strategies: SVM, logistic regression (from your answer to
+the previous question), the naive Bayes classifier, and a variant of
+random forests that combines SVMs and decision trees.
+
+\subsection{The task and data}
+
+The data for this homework is adapted from the UCI credit card
+dataset. The goal is to predict whether a bank customer will default
+on their credit card payment. For more details about the data, see
+
+\noindent Yeh, I. C., \& Lien, C. H. (2009). {\em The comparisons of
+  data mining techniques for the predictive accuracy of probability
+  of default of credit card clients}. Expert Systems with
+Applications, 36(2), 2473-2480.
+
+We have transformed the original features into a collection of
+binary features and have split the data into the usual training,
+testing and cross-validation splits. The data file contains:
+
+\begin{enumerate}
+\item {\tt train.liblinear}: The full training set, with 20,000
+  examples.
+\item {\tt test.liblinear}: The test set, with 10,000 examples.
+\item To help with cross-validation, we have split the training set
+  into five parts {\tt training00.data} - {\tt training04.data} in
+  the folder {\tt CVSplits}.
+\end{enumerate}
+
+All the data files are in the same liblinear format as we have used
+in the previous homeworks.
+
+\subsection{Implementation and Evaluation Notes}
+
+Each algorithm has different hyper-parameters, as described below.
+Use $5$-fold cross-validation to identify the best hyper-parameters
+as you did in the previous homework.
+
+The positive and negative labels are not balanced in this data. With
+such unequally distributed labels, we usually measure precision,
+recall and $F$-scores because the accuracy of a classifier could be
+misleading. 
+
+To compute these quantities, you should count the number of true
+positives (that is, examples that your classifier predicts as
+positive and are truly positive), the false positives (i.e, examples
+that your classifier predicts as positive, but are actually labeled
+negative) and the false negatives (i.e., examples that are predicted
+as negative by your classifier, but are actually positive).
+
+Denote true positives, false positive and false negative as $TP$, $FP$
+and $FN$ respectively. The precision ($p$), recall ($r$) and f-value
+$F_1$ are defined as:
+\begin{eqnarray*}
+  p   & = & \frac{TP}{TP + FP} \\
+  r   & = & \frac{TP}{TP+FN}   \\
+  F_1 & = & 2 \frac{p \cdot r}{p + r} 
+\end{eqnarray*}
+
+For all your classifiers, you should report measure precision,
+recall and $F_1$. During cross-validation, use the average $F_1$
+instead of average accuracy.
+
+
+\subsection{Algorithms to Compare}
+
+\begin{enumerate}
+\item~[15 points] \textbf{Support Vector Machine}
+
+  Implement the simple stochastic sub-gradient descent version
+  algorithm SVM as described in the class. Assume that the learning
+  rate for the $t^{th}$ epoch is
+
+  $$\gamma_t = \frac{\gamma_0}{1 + t}$$
+
+  For this, and all subsequent implementations, you should choose an
+  appropriate number of epochs and justify your choice. One way to
+  select the number of epochs is to observe the value of the SVM
+  objective over the epochs and stop if the change in the value is
+  smaller than some small threshold. You do not have to use this
+  strategy, but your report should specify the number of epochs you
+  chose.
+
+  \textbf{Hyper-parameters}: 
+  \begin{enumerate}
+  \item Initial learning rate: $\gamma_0\in\{10^1, 10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}\}$
+  \item The regularization/loss tradeoff parameter: $C\in \{10^1, 10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}\}$
+  \end{enumerate}
+
+  
+  
+\item~[15 points] \textbf{Logistic regression}
+
+  Implement the Logistic Regression learner based on your algorithm in
+  the Question~\ref{sec:q1}.
+
+  \textbf{Hyper-parameters}: 
+  \begin{enumerate}
+  \item Initial learning rate: $\gamma_0\in\{10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}, 10^{-5}\}$
+  \item Tradeoff: $\sigma^2\in \{10^{-1}, 10^0, 10^{1}, 10^{2}, 10^{3}, 10^{4}\}$
+  \end{enumerate}
+
+\item~[15 points] \textbf{Naive Bayes}
+
+  Implement the simple Naive Bayes learner. You need to count the
+  features to get the likelihoods one at a time. To get the prior, you
+  will need to count the number of examples in each class.  
+
+  For every feature $x_i$, you should estimate its likelihood of
+  taking a value for a given label $y$ (which is either $+$ or $-$)
+  as:
+  %
+  \begin{equation*}
+    P(x_i \vert y) = \frac{Count(x_i, y)+\lambda}{Count(y)+S_i\lambda}.
+  \end{equation*}
+
+  Here, $S_i$ is the number of all possible values that $x_i$ can take
+  in the data. (In the data provided, each feature is binary, which
+  should simplify your implementation a lot.)
+
+  The hyper-parameter $\lambda$ is a smoothing term. In example we saw
+  in class, we set $\lambda= 1$.  But, in this experiment, you should
+  choose the best $\lambda$ based on cross-validation.
+
+  \textbf{Hyper-parameter}: Smoothing term: $\lambda \in \{2, 1.5, 1.0, 0.5\}$
+
+\item~[25 points] \textbf{SVM over trees}
+
+  In class we have learned how the bagging and random forest
+  algorithms work.  In this setting, you are going to build a
+  different ensemble over depth-limited decision trees that are
+  learned using the ID3 algorithm.
+
+  First, using the training set, you need to build $200$ decision
+  trees. To construct a decision tree, you need to sample $10\%$ of
+  the examples {\em with replacement} from the training set
+  (i.e. 2000 examples), and use this subset to train your decision
+  tree with a depth limit $d$. Repeating this $200$ times will get
+  you $200$ trees.
+
+  Usually, the final prediction will be voted on by these
+  trees. However, we would like to train an SVM to combine these
+  predictions. To do so, you should treat the $200$ trees as a
+  feature transformation and construct a new dataset by applying the
+  transformation. That is, suppose your trees were
+  $tree_1, tree_2, \cdots, tree_{200}$. Each of these are functions
+  that can predict a label for an example that is either $-1$ or
+  $+1$. Instead of just predicting the label, treat them as a
+  feature transformation $\phi(x)$ that is defined as:
+
+  
+  $$\phi(x) = [tree_1(x), tree_2(x), \cdots, tree_{N} (x)]$$  
+
+  In other words, you will build an $N$ dimensional vector
+  consisting of the prediction (1 or -1) of each tree that you
+  created. Thus, you have a {\em learned} feature transformation.
+
+  Now, you can train an SVM on these transformed features. (Don't
+  forget to transform the test set before making your final
+  evaluations.)
+
+  \textbf{Hyper-parameters}:
+  \begin{enumerate}
+  \item Initial learning rate $\gamma_0 \in\{10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}, 10^{-5}\}$
+  \item Tradeoff $C \in \{10^1, 10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}, 10^{-5}\}$
+  \item Depth: $d \in \{10, 20, 30\}$
+  \end{enumerate}
+
+\end{enumerate}
+
+
+\subsection{What to report}
+
+\begin{enumerate}
+\item For each algorithm above, briefly describe the design decisions
+  that you have made in your implementation. (E.g, what programming
+  language, how do you represent the vectors, trees, etc.)
+
+\item Report the best hyper-parameters, the average precision,
+  recall and $F_1$ achieved by those hyperparameters during
+  cross-validation and the precision/recall/$F_1$ on the test
+  set. You can use the table \ref{tb} as a template for your reporting.
+
+  \begin{table}[]
+    \centering
+    \scriptsize
+    \begin{tabular}{rccc}
+      \toprule 
+                          & Best hyper-parameters & Average Cross-validation P/R/F1 & Test P/R/F1 \\\midrule
+      SVM                 &                       &                                 &             \\
+      Logistic regression &                       &                                 &             \\
+      Naive Bayes         &                       &                                 &             \\
+      SVM over trees      &                       &                                 &             \\
+      \bottomrule
+    \end{tabular}
+    \caption{Results table}\label{tb}
+  \end{table}
+\end{enumerate}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "hw5"
+%%% End:

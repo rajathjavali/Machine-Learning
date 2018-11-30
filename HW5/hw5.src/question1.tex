@@ -1,0 +1,37 @@
+\section{Logistic Regression}\label{sec:q1}
+
+We looked Maximum A Posteriori (MAP) learning of the logisitic
+regression classifier in class.  In particular, we showed that
+learning the classifier is equivalent to the following optimization
+problem:
+\begin{equation*}
+    \min_{\mathbf{w}}\left\{\sum\limits_{i=1}^m \log(1+\exp(-y_i \mathbf{w}^{T}\mathbf{x}_i))+\frac{1}{\sigma^2}\mathbf{w}^T \mathbf{w}\right\}
+\end{equation*}
+
+In this question, you will derive the stochastic gradient descent
+algorithm for the logistic regression classifier. 
+
+\begin{enumerate}
+\item~[5 points] What is the derivative of the function
+  $g(\mathbf{w})=\log(1+\exp(-y_i \mathbf{w}^T\mathbf{x}_i))$ with
+  respect to the weight vector?
+
+\item~[5 points] The inner most step in the SGD algorihtm is the
+  gradient update where we use a single example instead of the entire
+  dataset to compute the gradient.  Write down the objective where the
+  entire dataset is composed of a single example, say
+  $(\mathbf{x}_i, y_i)$.  Derive the gradient with respect to the
+  weight vector.
+
+\item~[10 points] Write down the pseudo code for the stochastic
+  gradient algorithm using the gradient from previous part.
+
+  Hint: The answer to this question will be an algorithm that is
+  similar to the SGD based learner we developed in the class for SVMs.
+
+\end{enumerate}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "hw5"
+%%% End:

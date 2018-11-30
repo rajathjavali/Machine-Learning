@@ -1,0 +1,23 @@
+\section{[25 points, Extra Credit for the holidays] Na\"ive Bayes and Linear Classifiers }
+\label{sec:q1}
+
+
+In this problem you will show that a Gaussian na\"ive Bayes classifier is a linear classifier. We will denote inputs by $d$ dimensional vectors, $\bx = (x_1, x_2,\dots, x_d)^T$. We will assume that each feature $x_j$ is a real number. Our classifier will predict the label 1 if $\Pr(y=1|\bx) \geq \Pr(y=0|\bx)$. Or equivalently,
+\[
+\frac{\Pr(\bx | y=1)\Pr(y=1)}{\Pr(\bx | y=0)\Pr(y=0)} \geq 1
+\]
+Remember the na\"ive Bayes assumption we saw in class:
+\[
+\Pr(\bx|y) = \prod_{j=0}^{d}\Pr(x_j|y)
+\]
+Suppose each $P(x_j|y)$ is defined using a Gaussian/Normal probability density function, one for each value of $y$ and $j$. Each Gaussian distribution has mean $\mu_{j,y}$ and variance $\sigma^2$ (Note that they will all have same variance). As a reminder, the Gaussian distribution is represented by the following probability density function:
+\[
+f(x_j\,|\,\mu_{j,y}, \sigma) = \frac{1}{\sqrt{2\sigma^2\pi}}e^{-\frac{(x_j-\mu_{j,y})^2}{2\sigma^2}}
+\]
+Show that this na\"ive Bayes classifier has a linear decision boundary.\\ \textit{[Hint: Refer to the notes on the naive Bayes classifier and Linear models in the class website to see how to do this with binary features]}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "hw5"
+%%% End:
