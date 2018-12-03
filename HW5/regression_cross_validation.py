@@ -1,6 +1,6 @@
 # import time
 import HW5.dataParser as dtP
-import HW5.svm as SVM
+import HW5.logisticRegression as lregression
 
 dataTrain = dtP.DataParser("data/train.liblinear")
 dataTest = dtP.DataParser("data/test.liblinear")
@@ -22,55 +22,50 @@ max_f1 = 0
 max_f1_accuracy = 0
 max_f1_recall = 0
 max_f1_precision = 0
-max_balancer = 0
-max_learning_rate = 0
+max_sigma = 1
+max_learning_rate = 1
 
-print("Starting svm:\n")
+print("Starting Logistic Regression:\n")
 for lr in [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]:
     print("learning rate = " + str(lr))
-    for balancer_c in [10, 1, 0.1, 0.01, 0.001, 0.0001]:
-        print("\tbalancer = " + str(balancer_c))
+    for sigma in [0.1, 1, 10, 100, 1000, 10000]:
+        print("\tsigma square = " + str(sigma))
         f1_set = []
         recall_set = []
         precision_set = []
         accuracies_set = []
         for test_set_num, data_set in enumerate(data_sets):
             # print("\t\tcross validation = " + str(test_set_num))
-            split_svm = \
-                SVM.Svm(data_set, dataTrain.max_variable)
-            weights = split_svm.run_svm(10, lr, balancer_c)
-            f1, precision, recall = SVM.get_classifier_stats(folds[test_set_num].raw_data, weights)
+            split_logistic_regression = lregression.LogisticRegression(data_set, dataTrain.max_variable)
+            weights = split_logistic_regression.run_regression(10, lr, sigma)
+            f1, precision, recall = lregression.get_classifier_stats(folds[test_set_num].raw_data, weights)
             f1_set.append(f1)
             precision_set.append(precision)
             recall_set.append(recall)
-            f1_set.append(f1)
-            accuracies_set.append(SVM.model_accuracy(folds[test_set_num].raw_data, weights))
-            # print("\t\t\taccuracy = " + str() + " F1 = " + str(f1))
+            accuracies_set.append(lregression.model_accuracy(folds[test_set_num].raw_data, weights))
 
-        average_f1 = SVM.avg(f1_set)
-        average_precision = SVM.avg(precision_set)
-        average_recall = SVM.avg(recall_set)
-        average_accuracy = SVM.avg(accuracies_set)
+        average_f1 = lregression.avg(f1_set)
+        average_precision = lregression.avg(precision_set)
+        average_recall = lregression.avg(recall_set)
+        average_accuracy = lregression.avg(accuracies_set)
 
         print("\t\tAverage: F1 = " + str(average_f1) + ", Precision = " + str(average_precision) + ", Recall = "
               + str(average_recall) + ", Accuracy = " + str(average_accuracy))
 
         if average_f1 > max_f1:
             max_learning_rate = lr
-            max_balancer = balancer_c
+            max_sigma = sigma
             max_f1 = average_f1
             max_f1_accuracy = average_accuracy
             max_f1_precision = average_precision
             max_f1_recall = average_recall
-        elif average_f1 < (max_f1/3):
-            break
 
-svm = SVM.Svm(dataTrain.raw_data, dataTrain.max_variable)
-weights = svm.run_svm(10, max_learning_rate, max_balancer)
-f1, precision, recall = SVM.get_classifier_stats(dataTest.raw_data, weights)
-print("\nStats:\nBalancer = " + str(max_balancer) + "\nlearning rate = " + str(max_learning_rate)
+regression = lregression.LogisticRegression(dataTrain.raw_data, dataTrain.max_variable)
+weights = regression.run_regression(10, max_learning_rate, max_sigma)
+f1, precision, recall = lregression.get_classifier_stats(dataTest.raw_data, weights)
+print("\nStats:\nBalancer = " + str(max_sigma) + "\nlearning rate = " + str(max_learning_rate)
       + "\nF1 = " + str(f1) + "\nPrecision = " + str(precision) + "\nRecall = " + str(recall)
-      + "\nAccuracy test data = " + str(str(SVM.model_accuracy(dataTest.raw_data, weights))))
+      + "\nAccuracy test data = " + str(str(lregression.model_accuracy(dataTest.raw_data, weights))))
 
 # for lr in [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]:
 #     print("Starting svm: learning rate:" + str(lr))
