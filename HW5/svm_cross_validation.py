@@ -25,10 +25,16 @@ max_f1_precision = 0
 max_balancer = 0
 max_learning_rate = 0
 
+learning_rate_test_set = [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]
+balancer_test_set = [10, 1, 0.1, 0.01, 0.001, 0.0001]
+
+# learning_rate_test_set = [1]
+# balancer_test_set = [10, 1]
+#
 print("Starting svm:\n")
-for lr in [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]:
+for lr in learning_rate_test_set:
     print("learning rate = " + str(lr))
-    for balancer_c in [10, 1, 0.1, 0.01, 0.001, 0.0001]:
+    for balancer_c in balancer_test_set:
         print("\tbalancer = " + str(balancer_c))
         f1_set = []
         recall_set = []

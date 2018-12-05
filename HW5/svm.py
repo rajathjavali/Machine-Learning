@@ -7,8 +7,6 @@ def count_mistakes(data, weights):
         for line in data:
             WX = helper.vector_dict_multiply(weights, line)
             label = int(line["label"])
-            if label == 0:
-                label = -1
             if WX * label <= 0:
                 mistakes += 1
 
@@ -21,7 +19,7 @@ def get_predictions(data, weights):
         for line in data:
             WX = helper.vector_dict_multiply(weights, line)
             if WX < 0:
-                pred = 0
+                pred = -1
             else:
                 pred = 1
             output.append(pred)
@@ -41,12 +39,10 @@ def get_classifier_stats(data, weights):
         for line in data:
             WX = helper.vector_dict_multiply(weights, line)
             label = int(line["label"])
-            if label == 0:
-                label = -1
 
-            if WX > 0 and label == 1:
+            if WX >= 0 and label == 1:
                 true_positive += 1
-            elif WX > 0 and label == -1:
+            elif WX >= 0 and label == -1:
                 false_positive += 1
             elif WX < 0 and label == 1:
                 false_negative += 1
