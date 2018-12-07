@@ -1,8 +1,6 @@
 from enum import Enum
 import math
 import copy
-import DecisionTree.node as node
-import time
 
 
 class NodeType(Enum):
@@ -237,12 +235,12 @@ class DecisionTree:
     # it is a recursive function which builds a decision tree using the ID3 algorithm
     def __build_id3(self, attributes, data_set, tree_node, tree_depth):
         if tree_depth <= 0:
-            tree_node.type = node.NodeType.LABEL
+            tree_node.type = NodeType.LABEL
             tree_node.attribute_val = self.__best_label_finder(data_set)
             return
         # if either we exhaust our data set or feature attributes
         if len(attributes) == 0 or len(data_set) == 0:
-            tree_node.type = node.NodeType.LABEL
+            tree_node.type = NodeType.LABEL
             tree_node.attribute_val = "Error"
             return
 
@@ -255,7 +253,7 @@ class DecisionTree:
 
         # assigning the label if all the data lines have the same output
         if flag != -1:
-            tree_node.type = node.NodeType.LABEL
+            tree_node.type = NodeType.LABEL
             tree_node.attribute_val = flag
             return
         # choosing the best attribute possible which is based on highest information gain
@@ -273,7 +271,7 @@ class DecisionTree:
         # print("in node: " + node.attribute_val + " depth: " + str(tree_depth))
         if len(new_attributes) != 0:
             tree_node.set_choices(choices)
-            tree_node.children["other"] = node.Node(node.NodeType.LABEL)
+            tree_node.children["other"] = Node(NodeType.LABEL)
             tree_node.children["other"].attribute_val = self.__best_label_finder(data_set)
             for i in choices:
                 # modify data set and attribute set
@@ -288,15 +286,15 @@ class DecisionTree:
                 if len(new_data_set) != 0:
                     self.__build_id3(new_attributes, new_data_set, tree_node.children[i], tree_depth - 1)
                 else:
-                    tree_node.children[i] = node.Node(node.NodeType.LABEL)
+                    tree_node.children[i] = Node(NodeType.LABEL)
                     tree_node.children[i].attribute_val = self.__best_label_finder(data_set)
         else:
-            tree_node.children["label"] = node.Node(node.NodeType.LABEL)
+            tree_node.children["label"] = Node(NodeType.LABEL)
             tree_node.children["label"].attribute_val = self.__best_label_finder(data_set)
 
     # finds the max depth of the tree
     def max_depth_id3(self, tree_node):
-        if tree_node.type == node.NodeType.LABEL:
+        if tree_node.type == NodeType.LABEL:
             return 0
         max_depth = 0
         for i in tree_node.children:
@@ -317,7 +315,7 @@ class DecisionTree:
         if tree_depth is None:
             tree_depth = len(self.attribute_set)
         if self.tree is None:
-            self.tree = node.Node(node.NodeType.NODE)
+            self.tree = Node(NodeType.NODE)
         self.__build_id3(self.attribute_set, self.data_set, self.tree, tree_depth)
         # print(str(self.max_depth_id3(self.tree)))
         # self.print_tree(self.tree, None, None)
@@ -325,7 +323,7 @@ class DecisionTree:
     # this function uses the decision tree to traverse through the tree given a data line
     # it returns back a decision label which the tree makes
     def __check_decision_tree(self, tree_node, data_line):
-        if tree_node.type == node.NodeType.LABEL:
+        if tree_node.type == NodeType.LABEL:
             # print(node.attribute_val)
             return tree_node.attribute_val
         if tree_node.attribute_val in data_line:
