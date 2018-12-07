@@ -14,21 +14,43 @@ algorithm for the logistic regression classifier.
 \begin{enumerate}
 \item~[5 points] What is the derivative of the function
   $g(\mathbf{w})=\log(1+\exp(-y_i \mathbf{w}^T\mathbf{x}_i))$ with
-  respect to the weight vector?
+  respect to the weight vector?\\
+  Using chain rule for differentiation with respect to weight vector w:\\
+  \[g'(\mathbf{w})=\frac{d}{dw}\log(1+\exp(-y_i \mathbf{w}^T\mathbf{x}_i))\]
+  \[g'(\mathbf{w})=\frac{1}{(1+\exp(-y_i \mathbf{w}^T\mathbf{x}_i))}*\frac{d}{dw}(1+\exp(-y_i \mathbf{w}^T\mathbf{x}_i))\]
+  \[g'(\mathbf{w})=\frac{1}{(1+\exp(-y_i \mathbf{w}^T\mathbf{x}_i))}*[(-y_i \mathbf{x}_i)\exp(-y_i\mathbf{w}^T\mathbf{x}_i)]\]
+  On further simplification we get:
+  \[g'(\mathbf{w})=\frac{-y_i \mathbf{x}_i}{(1+\exp(y_i \mathbf{x}_i))}\]
 
 \item~[5 points] The inner most step in the SGD algorihtm is the
   gradient update where we use a single example instead of the entire
   dataset to compute the gradient.  Write down the objective where the
   entire dataset is composed of a single example, say
   $(\mathbf{x}_i, y_i)$.  Derive the gradient with respect to the
-  weight vector.
-
+  weight vector.\\
+  We need to optimize the minimizing function in the question.\\
+  As we have seen before on perceptron or any other convex functions, gradient descent update is done by the expression:\\
+  \[w^{t+1} = w^t - r\nabla J(w^t)\]
+  \[J(w^t) = \log(1+\exp(-y_i \mathbf{w}^T\mathbf{x}_i)) + \frac{1}{\sigma^2}\mathbf{w}^T\mathbf{w} \]
+    \[\nabla J(w^t) = \frac{dJ(w)}{dw}\]
+    \[\nabla J(w^t) = \frac{-y_i \mathbf{x}_i}{(1+\exp(y_i \mathbf{x}_i))} + \frac{2}{\sigma^2}\mathbf{w}\]
 \item~[10 points] Write down the pseudo code for the stochastic
   gradient algorithm using the gradient from previous part.
 
   Hint: The answer to this question will be an algorithm that is
   similar to the SGD based learner we developed in the class for SVMs.
-
+\begin{itemize}
+    \item Initialize weight vector w = 0
+    \item For each epoch in range 1 ... N:
+    \begin{itemize}
+        \item Shuffle the training set
+        \item Pick a ramdom example and assume this represents the entire training set.
+        \item We update the weight vector if $y_iw^Tx_i <= 1$. If the current iteration is t and learing rate is r, the update expression is given by:
+        \[w_t = w_{t-1} - r\nabla J(w_{t-1})\]
+        \[w_t = w_{t-1} + r\frac{y_ix_i}{1+\exp(y_i \mathbf{x}_i)} - \frac{2r}{\sigma^2}\mathbf{w}\]
+    \end{itemize}
+    \item return the final weight vector $\mathbf{w}$
+\end{itemize}
 \end{enumerate}
 
 %%% Local Variables:

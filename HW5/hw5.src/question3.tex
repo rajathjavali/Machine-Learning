@@ -3,18 +3,32 @@
 
 
 In this problem you will show that a Gaussian na\"ive Bayes classifier is a linear classifier. We will denote inputs by $d$ dimensional vectors, $\bx = (x_1, x_2,\dots, x_d)^T$. We will assume that each feature $x_j$ is a real number. Our classifier will predict the label 1 if $\Pr(y=1|\bx) \geq \Pr(y=0|\bx)$. Or equivalently,
-\[
-\frac{\Pr(\bx | y=1)\Pr(y=1)}{\Pr(\bx | y=0)\Pr(y=0)} \geq 1
-\]
+\[\frac{\Pr(\bx | y=1)\Pr(y=1)}{\Pr(\bx | y=0)\Pr(y=0)} \geq 1\]
 Remember the na\"ive Bayes assumption we saw in class:
-\[
-\Pr(\bx|y) = \prod_{j=0}^{d}\Pr(x_j|y)
-\]
+\[\Pr(\bx|y) = \prod_{j=0}^{d}\Pr(x_j|y)\]
 Suppose each $P(x_j|y)$ is defined using a Gaussian/Normal probability density function, one for each value of $y$ and $j$. Each Gaussian distribution has mean $\mu_{j,y}$ and variance $\sigma^2$ (Note that they will all have same variance). As a reminder, the Gaussian distribution is represented by the following probability density function:
-\[
-f(x_j\,|\,\mu_{j,y}, \sigma) = \frac{1}{\sqrt{2\sigma^2\pi}}e^{-\frac{(x_j-\mu_{j,y})^2}{2\sigma^2}}
-\]
-Show that this na\"ive Bayes classifier has a linear decision boundary.\\ \textit{[Hint: Refer to the notes on the naive Bayes classifier and Linear models in the class website to see how to do this with binary features]}
+\[f(x_j\,|\,\mu_{j,y}, \sigma) = \frac{1}{\sqrt{2\sigma^2\pi}}e^{-\frac{(x_j-\mu_{j,y})^2}{2\sigma^2}}\]
+Show that this na\"ive Bayes classifier has a linear decision boundary.\\ \textit{[Hint: Refer to the notes on the naive Bayes classifier and Linear models in the class website to see how to do this with binary features]}\\\\
+\underline{Ans:} Combining the 2 equations in the question we have the values:
+\[\dfrac{P(y=1)}{P(y=0)}\prod_{j=0}^d \dfrac{P(x_j|y=1)}{P(x_j|y=0)} \ge 1\]
+From the question we know each value of y and j has mean $\mu_{j,y}$ and variance $\sigma^2$\\
+Hence, lets assume for $y=1$ and for a particular $j$ we have mean as $\mu_{j,y_1}$. Lets represent the prior probability of $P(y=1)$ as $p$. Therefore, the prior probability of $P(y=0)$ will be $(1-p)$.\\
+Substituting these values making use of the equations above we get the decision boundary:\\
+\[\frac{p}{1-p} \prod_{j=0}^d \dfrac{\dfrac{1}{\sqrt[2]{2\pi \sigma^2}}e^{-\dfrac{(x_j - \mu_{j,y_1})^2}{2\sigma^2}}}{\dfrac{1}{\sqrt[2]{2\pi \sigma^2}}e^{-\dfrac{(x_j - \mu_{j,y_0})^2}{2\sigma^2}}} \ge 1 \]
+
+\[\frac{p}{1-p} \prod_{j=0}^d e^{\dfrac{1}{2\sigma^2}(\mu_{j,y_1} - \mu_{j,y_0})(2x_j - \mu_{j,y_0} - \mu_{j,y_1})} \ge 1\]
+
+Taking log on both sides and rearranging the terms:
+\[\log(\dfrac{p}{1-p}) + \dfrac{1}{2\sigma^2}\sum_{j=0}^d (\mu_{j,y_1} - \mu_{j,y_0})(-\mu_{j,y_1} - \mu_{j,y_0}) + \dfrac{1}{2\sigma^2} \sum_{j=0}^d 2x_j (\mu_{j,y_1} - \mu_{j,y_0}) \geq 0\]
+	
+Mean values for each individual distribution is particular for that distribution and is always a consistent/constant value with respect to $x_j$. Also it is stated that the variance is exactly same for each and every distribution. Therefore from the previous stated expression we can isolate the consistent term as bias: 
+
+	\[bias = b = \log(\dfrac{p}{1-p}) - \dfrac{1}{2\sigma^2}\sum_{j=0}^d (\mu_{j,y_1}^2 - \mu_{j,y_0}^2)\]
+and also we have
+	\[weights, w_j = \dfrac{1}{\sigma^2}(\mu_{j,y_1} - \mu_{j,y_0})\]
+	Therefore, the decision boundary value can be written as:
+	\[b + \sum_{j=0}^d w_jx_j \geq 0\]
+	Thus, we can conclude that our classifier is linear in nature.
 
 
 %%% Local Variables:

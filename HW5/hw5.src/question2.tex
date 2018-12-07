@@ -5,64 +5,6 @@ learning strategies: SVM, logistic regression (from your answer to
 the previous question), the naive Bayes classifier, and a variant of
 random forests that combines SVMs and decision trees.
 
-\subsection{The task and data}
-
-The data for this homework is adapted from the UCI credit card
-dataset. The goal is to predict whether a bank customer will default
-on their credit card payment. For more details about the data, see
-
-\noindent Yeh, I. C., \& Lien, C. H. (2009). {\em The comparisons of
-  data mining techniques for the predictive accuracy of probability
-  of default of credit card clients}. Expert Systems with
-Applications, 36(2), 2473-2480.
-
-We have transformed the original features into a collection of
-binary features and have split the data into the usual training,
-testing and cross-validation splits. The data file contains:
-
-\begin{enumerate}
-\item {\tt train.liblinear}: The full training set, with 20,000
-  examples.
-\item {\tt test.liblinear}: The test set, with 10,000 examples.
-\item To help with cross-validation, we have split the training set
-  into five parts {\tt training00.data} - {\tt training04.data} in
-  the folder {\tt CVSplits}.
-\end{enumerate}
-
-All the data files are in the same liblinear format as we have used
-in the previous homeworks.
-
-\subsection{Implementation and Evaluation Notes}
-
-Each algorithm has different hyper-parameters, as described below.
-Use $5$-fold cross-validation to identify the best hyper-parameters
-as you did in the previous homework.
-
-The positive and negative labels are not balanced in this data. With
-such unequally distributed labels, we usually measure precision,
-recall and $F$-scores because the accuracy of a classifier could be
-misleading. 
-
-To compute these quantities, you should count the number of true
-positives (that is, examples that your classifier predicts as
-positive and are truly positive), the false positives (i.e, examples
-that your classifier predicts as positive, but are actually labeled
-negative) and the false negatives (i.e., examples that are predicted
-as negative by your classifier, but are actually positive).
-
-Denote true positives, false positive and false negative as $TP$, $FP$
-and $FN$ respectively. The precision ($p$), recall ($r$) and f-value
-$F_1$ are defined as:
-\begin{eqnarray*}
-  p   & = & \frac{TP}{TP + FP} \\
-  r   & = & \frac{TP}{TP+FN}   \\
-  F_1 & = & 2 \frac{p \cdot r}{p + r} 
-\end{eqnarray*}
-
-For all your classifiers, you should report measure precision,
-recall and $F_1$. During cross-validation, use the average $F_1$
-instead of average accuracy.
-
 
 \subsection{Algorithms to Compare}
 
@@ -88,7 +30,19 @@ instead of average accuracy.
   \item Initial learning rate: $\gamma_0\in\{10^1, 10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}\}$
   \item The regularization/loss tradeoff parameter: $C\in \{10^1, 10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}\}$
   \end{enumerate}
-
+  \underline{Ans:} Implementation involved modifying the weights update method on the simple perceptron code. Rest all remaining the same. Cross validation was done on learning rate and balancer C, in a decreasing order. Prediction cross product * label $\ge$ 0 is labeled positive else negative. And if for any set of hyper parameter average is less than 1/3rd of max average then I skip the hyper parameter values.\\\\
+  Cross Validation results: \\
+  \hspace*{4mm}Learning rate 0.01, balancer 10\\
+  \hspace*{4mm}Averages:\\
+  \hspace*{8mm}F1 = 0.442605\\
+  \hspace*{8mm}Precision = 0.685459\\
+  \hspace*{8mm}Recall = 0.326856\\
+  \hspace*{8mm}Accuracy = 81.86\%\\
+  Test Run Results using learning rate 0.01 and load balancer 10:\\
+  \hspace*{8mm}F1 = 0.449118\\
+  \hspace*{8mm}Precision = 0.722388\\
+  \hspace*{8mm}Recall = 0.325853\\
+  \hspace*{8mm}Accuracy = 82.19\%\\
   
   
 \item~[15 points] \textbf{Logistic regression}
@@ -101,7 +55,21 @@ instead of average accuracy.
   \item Initial learning rate: $\gamma_0\in\{10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}, 10^{-5}\}$
   \item Tradeoff: $\sigma^2\in \{10^{-1}, 10^0, 10^{1}, 10^{2}, 10^{3}, 10^{4}\}$
   \end{enumerate}
-
+  Implementation based on Perceptron. Weight vector updates are based on 1b - stochastic gradient descent. Updates are made when dot product of weight and example * label is less than or equal to 0. Initial weight vector is assignment to 0, but there was no difference when assigned with random weights between -1 to 1.
+  Best Parameters:\\
+  \hspace*{4mm}Learning rate 0.001
+  \hspace*{4mm}sigma squared 100\\
+  \hspace*{8mm}Cross Validation:\\
+  \hspace*{12mm}Avg. F1 = 0.403011\\
+  \hspace*{12mm}Avg. Precision = 0.391119\\
+  \hspace*{12mm}Avg. Recall = 0.428492\\
+  \hspace*{12mm}Avg. Accuracy = 71.93\%\\
+  \hspace*{8mm}Test:\\
+  \hspace*{12mm}F1 = 0.381619\\
+  \hspace*{12mm}Precision = 0.475553\\
+  \hspace*{12mm}Recall = 0.318671\\
+  \hspace*{12mm}Accuracy on Test = 76.99\%\\
+  
 \item~[15 points] \textbf{Naive Bayes}
 
   Implement the simple Naive Bayes learner. You need to count the
@@ -124,7 +92,20 @@ instead of average accuracy.
   in class, we set $\lambda= 1$.  But, in this experiment, you should
   choose the best $\lambda$ based on cross-validation.
 
-  \textbf{Hyper-parameter}: Smoothing term: $\lambda \in \{2, 1.5, 1.0, 0.5\}$
+  \textbf{Hyper-parameter}: Smoothing term: $\lambda \in \{2, 1.5, 1.0, 0.5\}$\\\\
+  \underline{Ans:} Implemented the algorithm completely from the scratch. Training is basically finding probability for every value which every feature could take for every labels in the data. I used logarithm of the probabilities to help with floating point precision issues on multiplication. With log probabilities we can just add the values and predict. Prediction is done for every label and highest probability label is used as the prediction. To calculate the probability we add log of raw prob of the label and then add rest of the log probability based on the value of the features present. Train phase saves all the log probabilities in a dictionary\\
+  Cross validation results:\\
+  \hspace*{4mm}Best smoothing term = 2 \\
+  \hspace*{4mm}average F1 = 0.508315 \\
+  \hspace*{4mm}average Precision = 0.497278 \\
+  \hspace*{4mm}average Recall = 0.520284\\
+  \hspace*{4mm}average accuracy = 77.82\%\\
+  Test run results using smoothing term = 2\\
+  \hspace*{4mm}F1 = 0.526526\\
+  \hspace*{4mm}Precision = 0.520861\\
+  \hspace*{4mm}Recall = 0.532316\\
+  \hspace*{4mm}Accuracy = 78.67\%
+  
 
 \item~[25 points] \textbf{SVM over trees}
 
@@ -167,37 +148,33 @@ instead of average accuracy.
   \item Tradeoff $C \in \{10^1, 10^0, 10^{-1}, 10^{-2}, 10^{-3}, 10^{-4}, 10^{-5}\}$
   \item Depth: $d \in \{10, 20, 30\}$
   \end{enumerate}
-
+\underline{Ans:} For fixing the cross validation I assumed few things.\\
+Due to time constraints I did cross validation with 20 trees. I built 20 decision trees sampling 10\% of the training set. Used these trees to transform features on both the cross validation training and testing set.\\\\
+After generating all the cross validation training and testing sets, used it on an svm to cross validate the hyper parameters of learning rate and load balancer.\\
+Initial run with 20 trees for cross validation gave best parameters as:\\
+\hspace*{4mm}limiting depth = 10 \\
+\hspace*{4mm}learning rate = 1\\
+\hspace*{4mm}balancer = 0.1\\
+\hspace*{2mm}With averages as follows:\\
+\hspace*{4mm}F1 = 0.394505\\
+\hspace*{4mm}Precision = 0.677340\\
+\hspace*{4mm}Recall = 0.278241\\
+\hspace*{4mm}Accuracy = 81.18\%\\
+Final Run was done using learning rate 1 and load balancer as 0.1 with 200 trees on the test set.\\
+Results are as follows:\\
+\hspace*{4mm}limiting depth = 10 \\
+\hspace*{4mm}learning rate = 1\\
+\hspace*{4mm}balancer = 0.1\\
+\hspace*{2mm}With averages as follows:\\
+\hspace*{4mm}F1 = 0.4\\
+\hspace*{4mm}Precision = 0.719953\\
+\hspace*{4mm}Recall = 0.27693\\
+\hspace*{4mm}Accuracy = 81.49\%\\\\
+\underline{Observation:} For this data set the F1 averages are very close to one another except for few hyper parameter values like learning rate 1 balancer 10. So every time it is executed we get a different value for learning rate and balancer, but the values for different stats remains almost the same.
 \end{enumerate}
 
 
-\subsection{What to report}
 
-\begin{enumerate}
-\item For each algorithm above, briefly describe the design decisions
-  that you have made in your implementation. (E.g, what programming
-  language, how do you represent the vectors, trees, etc.)
-
-\item Report the best hyper-parameters, the average precision,
-  recall and $F_1$ achieved by those hyperparameters during
-  cross-validation and the precision/recall/$F_1$ on the test
-  set. You can use the table \ref{tb} as a template for your reporting.
-
-  \begin{table}[]
-    \centering
-    \scriptsize
-    \begin{tabular}{rccc}
-      \toprule 
-                          & Best hyper-parameters & Average Cross-validation P/R/F1 & Test P/R/F1 \\\midrule
-      SVM                 &                       &                                 &             \\
-      Logistic regression &                       &                                 &             \\
-      Naive Bayes         &                       &                                 &             \\
-      SVM over trees      &                       &                                 &             \\
-      \bottomrule
-    \end{tabular}
-    \caption{Results table}\label{tb}
-  \end{table}
-\end{enumerate}
 
 %%% Local Variables:
 %%% mode: latex
