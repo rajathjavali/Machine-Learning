@@ -1,5 +1,6 @@
 # import time
 import random
+import time
 
 import HW5.dataParser as dtP
 import HW5.decisionTree as dT
@@ -79,15 +80,17 @@ max_learning_rate = 0
 
 
 depth_test_set = [10, 20, 30]
-# learning_rate_test_set = [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]
-# balancer_test_set = [10, 1, 0.1, 0.01, 0.001, 0.0001]
-learning_rate_test_set = [1, 0.1]
-balancer_test_set = [10, 1, 0.01]
+learning_rate_test_set = [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]
+balancer_test_set = [10, 1, 0.1, 0.01, 0.001, 0.0001]
+# depth_test_set = [10]
+# learning_rate_test_set = [1, 0.1]
+# balancer_test_set = [10, 1, 0.01]
 
 cross_fold_data_set = []
 cross_fold_test_set = []
 
 cross_validation_trees = 20
+print("Start Time", time.asctime())
 for limiting_depth in depth_test_set:
     for test_set_num, data_set in enumerate(data_sets):
         test_set = folds[test_set_num].raw_data
@@ -141,7 +144,9 @@ final_svm_testing_set, final_svm_training_set = \
 
 svm = SVM.Svm(final_svm_training_set, final_bagged_trees_count)
 weights = svm.run_svm(10, max_learning_rate, max_balancer)
+
+print("End Time", time.asctime())
 f1, precision, recall = SVM.get_classifier_stats(final_svm_testing_set, weights)
 print("\nStats:\nBalancer = " + str(max_balancer) + "\nlearning rate = " + str(max_learning_rate)
       + "\nF1 = " + str(f1) + "\nPrecision = " + str(precision) + "\nRecall = " + str(recall)
-      + "\nAccuracy test data = " + str(str(SVM.model_accuracy(dataTest.raw_data, weights))))
+      + "\nAccuracy test data = " + str(str(SVM.model_accuracy(final_svm_testing_set, weights))))
