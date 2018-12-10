@@ -1,3 +1,5 @@
+import random
+import copy
 import numpy as np
 
 
@@ -42,3 +44,12 @@ class DataParser:
             raw_data.append(line_data)
 
         return raw_data, max_variable
+
+    def create_cross_fold(self):
+        shuffled_data = copy.deepcopy(self.raw_data)
+        random.shuffle(shuffled_data)
+        folds = np.array_split(shuffled_data, 5)
+        cross_folds = []
+        for fold in folds:
+            cross_folds.append(fold.tolist())
+        return cross_folds
