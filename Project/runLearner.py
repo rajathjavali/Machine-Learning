@@ -25,7 +25,7 @@ def get_predictions(data, weights):
     if len(weights) != 0:
         for line in data:
             WX = helper.vector_dict_multiply(weights, line)
-            if WX < 0:
+            if WX <= 0:
                 pred = 0
             else:
                 pred = 1
@@ -44,15 +44,17 @@ dataEval = dtP.DataParser("movie-ratings/data-splits/data.eval.anon")
 
 resultFile = open("results.txt", "a")
 
-print("Starting Average Perceptron: learning rate: 1")
+learning_rate = 0.01
+
+print("Starting Average Perceptron: learning rate: " + str(learning_rate))
 average_perceptron = P.Perceptron(dataTrain.raw_data, dataTrain.max_variable)
 print("Start Time", time.asctime())
-weights = average_perceptron.run_perceptron(10, 1, dataTest.raw_data)
+weights = average_perceptron.run_perceptron(15, learning_rate, dataTest.raw_data)
 print("End Time", time.asctime())
-# accuracy = model_accuracy(dataTest.raw_data, weights)
-# print("Acc Perceptron: " + str(accuracy))
+accuracy = model_accuracy(dataTest.raw_data, weights)
+print("Acc Perceptron: " + str(accuracy))
 results = get_predictions(dataEval.raw_data, weights)
-resultFile.write("Averaged Perceptron \n")
+resultFile.write("Averaged Perceptron learning rate: " + str(learning_rate) + "\n")
 resultFile.write(str(results) + "\n")
 
 # print("Starting Average Perceptron: learning rate: 0.1")
