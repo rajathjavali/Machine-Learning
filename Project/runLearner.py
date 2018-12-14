@@ -54,7 +54,7 @@ print("End Time", time.asctime())
 accuracy = model_accuracy(dataTest.raw_data, weights)
 print("Acc Perceptron: " + str(accuracy))
 results = get_predictions(dataEval.raw_data, weights)
-resultFile.write("Averaged Perceptron learning rate: " + str(learning_rate) + "\n")
+resultFile.write("Averaged Perceptron learning rate: " + str(learning_rate) + " Accuracy: " + str(accuracy) + "\n")
 resultFile.write(str(results) + "\n")
 
 # print("Starting Average Perceptron: learning rate: 0.1")

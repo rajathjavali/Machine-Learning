@@ -5,17 +5,18 @@ import Perceptron.helper as helper
 import Project.dataParser as dtP
 
 
+def sigmoid(gamma):
+    if gamma < 0:
+        return 1 - 1 / (1 + math.exp(gamma))
+    return 1 / (1 + math.exp(-gamma))
+
+
 def get_predictions(data, weights):
     output = []
     if len(weights) != 0:
         for line in data:
             WX = helper.vector_dict_multiply(weights, line)
-            try:
-                exponent_term = math.exp(-WX)
-                factor = 1.0 / (1 + exponent_term)
-            except OverflowError:
-                factor = 0
-            if factor <= 0.5:
+            if WX < 0:
                 pred = 0
             else:
                 pred = 1
@@ -62,24 +63,6 @@ def get_classifier_stats(data, weights):
                 false_negative += 1
     else:
         print("len of weights is 0\n")
-        # for line in data:
-        #     label = int(line["label"])
-        #     if label == 0:
-        #         label = -1
-        #
-        #     WX = helper.vector_dict_multiply(weights, line)
-        #     try:
-        #         exponent_term = math.exp(-WX)
-        #         factor = 1.0 / (1 + exponent_term)
-        #     except OverflowError:
-        #         factor = 0
-        #
-        #     if factor > 0.5 and label == 1:
-        #         true_positive += 1
-        #     elif factor > 0.5 and label == -1:
-        #         false_positive += 1
-        #     elif factor <= 0.5 and label == 1:
-        #         false_negative += 1
 
     precision = true_positive
     if precision > 0:
@@ -104,7 +87,6 @@ class LogisticRegression:
         self.weights = helper.random_weight_vector(max_variable)
 
     def logistic_regression(self, data, learning_rate, seed, sigma):
-        num_updates = 0
         random_data = helper.data_randomizer(data, seed)
         weight_modifier = 1 - (2 * learning_rate / sigma)
         for index in random_data:
@@ -113,10 +95,7 @@ class LogisticRegression:
             label = int(line["label"])
             if label == 0:
                 label = -1
-            # checking whether the prediction made is correct or not
-            # if WX * label <= 0:
-            num_updates += 1
-            # modifying weights on wrong prediction
+
             try:
                 exponent_term = math.exp(label * WX)
             except OverflowError:
@@ -130,21 +109,18 @@ class LogisticRegression:
                     continue
                 self.weights[int(key)] += learning_rate * label * float(value) / (1 + exponent_term)
 
-                # for i in range(len(self.weights)):
-                #     if i == 0:
-                #         self.weights[0] += learning_rate * label / (1 + math.exp(label))
-                #     elif str(i) in line:
-                #         self.weights[i] += learning_rate * label * float(line[str(i)]) / (1 + exponent_term) \
-                #                            - 2 * learning_rate * self.weights[i] / sigma
-
-        return num_updates
+            # for i in range(len(self.weights)):
+            #     if i == 0:
+            #         self.weights[0] += learning_rate * label / (1 + math.exp(label))
+            #     elif str(i) in line:
+            #         self.weights[i] += learning_rate * label * float(line[str(i)]) / (1 + exponent_term) \
+            #                            - 2 * learning_rate * self.weights[i] / sigma
 
     def run_regression(self, epoch, learning_rate, sigma):
-        num_updates = []
         for i in range(0, epoch):
             print("\t\t\t\t\tepoch Start Time", time.asctime())
             epoch_learning_rate = learning_rate / (1 + epoch)
-            num_updates.append(self.logistic_regression(self.data, epoch_learning_rate, i+1, sigma))
+            self.logistic_regression(self.data, epoch_learning_rate, i+1, sigma)
             print("\t\t\t\t\tepoch End Time", time.asctime())
 
         return self.weights
@@ -154,23 +130,24 @@ dataTrain = dtP.DataParser("movie-ratings/data-splits/data.train")
 dataTest = dtP.DataParser("movie-ratings/data-splits/data.test")
 dataEval = dtP.DataParser("movie-ratings/data-splits/data.eval.anon")
 
-folds = dataTrain.create_cross_fold()
-
-data_sets = [
-    folds[1] + folds[2] + folds[3] + folds[4],
-    folds[0] + folds[2] + folds[3] + folds[4],
-    folds[0] + folds[1] + folds[3] + folds[4],
-    folds[0] + folds[1] + folds[2] + folds[4],
-    folds[0] + folds[1] + folds[2] + folds[3]
-]
 
 max_f1 = 0
 max_f1_accuracy = 0
 max_f1_recall = 0
 max_f1_precision = 0
-max_sigma = 1e2
-max_learning_rate = 0.00001
+max_sigma = 1e5
+max_learning_rate = 0.1
 
+# folds = dataTrain.create_cross_fold()
+#
+# data_sets = [
+#     folds[1] + folds[2] + folds[3] + folds[4],
+#     folds[0] + folds[2] + folds[3] + folds[4],
+#     folds[0] + folds[1] + folds[3] + folds[4],
+#     folds[0] + folds[1] + folds[2] + folds[4],
+#     folds[0] + folds[1] + folds[2] + folds[3]
+# ]
+#
 # print("Starting Logistic Regression:\n")
 # for lr in [1, 0.1, 0.01]:
 #     print("learning rate = " + str(lr))

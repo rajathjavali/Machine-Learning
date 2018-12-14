@@ -22,7 +22,7 @@ def count_mistakes(data, weights):
         label = int(line["label"])
         if label == 0:
             label = -1
-        if WX * label <= 0:
+        if WX * label < 0:
             mistakes += 1
 
     return mistakes

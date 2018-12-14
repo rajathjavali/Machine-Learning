@@ -13,7 +13,7 @@ def count_mistakes(data, weights):
             if label == 0:
                 label = -1
 
-            if WX * label <= 0:
+            if WX * label < 0:
                 mistakes += 1
 
     return mistakes
@@ -24,7 +24,7 @@ def get_predictions(data, weights):
     if len(weights) != 0:
         for line in data:
             WX = helper.vector_dict_multiply(weights, line)
-            if WX <= 0:
+            if WX < 0:
                 pred = -1
             else:
                 pred = 1
@@ -48,11 +48,11 @@ def get_classifier_stats(data, weights):
             if label == 0:
                 label = -1
 
-            if WX > 0 and label == 1:
+            if WX >= 0 and label == 1:
                 true_positive += 1
-            elif WX > 0 and label == -1:
+            elif WX >= 0 and label == -1:
                 false_positive += 1
-            elif WX <= 0 and label == 1:
+            elif WX < 0 and label == 1:
                 false_negative += 1
 
     precision = true_positive
@@ -130,8 +130,8 @@ def cross_validation():
     dataTest = dtP.DataParser("movie-ratings/data-splits/data.test")
     dataEval = dtP.DataParser("movie-ratings/data-splits/data.eval.anon")
 
-    max_balancer = 1e6
-    max_learning_rate = 1e-07
+    max_balancer = 1e3
+    max_learning_rate = 1e-06
     # max_balancer = 100
     # max_learning_rate = 0.1
 
@@ -193,7 +193,6 @@ def cross_validation():
     #         elif average_f1 < (max_f1/3):
     #             break
 
-    resultFile = open("results.txt", "a")
 
     print("Starting SVM: learning rate: " + str(max_learning_rate) + " Load Balancer: " + str(max_balancer))
     svm = Svm(dataTrain.raw_data, dataTrain.max_variable)
@@ -205,7 +204,10 @@ def cross_validation():
           + str(recall) + ", Accuracy = " + str(accuracy))
 
     results = get_predictions(dataEval.raw_data, weights)
-    resultFile.write("SVM learning rate: " + str(max_learning_rate) + " Balancer: " + str(max_balancer) + "\n")
+
+    resultFile = open("results.txt", "a")
+    resultFile.write("SVM learning rate: " + str(max_learning_rate) + " Balancer: " + str(max_balancer) + " Accuracy: "
+                     + str(accuracy) + "\n")
     resultFile.write(str(results) + "\n")
 
 

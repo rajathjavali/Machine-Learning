@@ -154,10 +154,12 @@ avg_perceptron = aP.Perceptron(final_training_set, final_bagged_perceptron_count
 weights = avg_perceptron.run_perceptron(10, max_learning_rate, None)
 
 f1, precision, recall = aP.get_classifier_stats(final_testing_set, weights)
+accuracy = SVM.model_accuracy(final_testing_set, weights)
 print("\nStats:\nlearning rate = " + str(max_learning_rate)
       + "\nF1 = " + str(f1) + "\nPrecision = " + str(precision) + "\nRecall = " + str(recall)
-      + "\nAccuracy test data = " + str(str(SVM.model_accuracy(final_testing_set, weights))))
+      + "\nAccuracy test data = " + str(accuracy))
 resultFile = open("results.txt", "a")
 results = aP.get_labels(final_eval_set, weights)
-resultFile.write("Bagged avg. perceptron learning rate: " + str(max_learning_rate) + "\n")
+resultFile.write("Bagged avg. perceptron learning rate: " + str(max_learning_rate) + " Accuracy: "
+                 + str(accuracy) + "\n")
 resultFile.write(str(results) + "\n")
