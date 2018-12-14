@@ -132,67 +132,65 @@ def cross_validation():
 
     max_balancer = 1e3
     max_learning_rate = 1e-06
-    # max_balancer = 100
-    # max_learning_rate = 0.1
 
-    # folds = dataTrain.create_cross_fold()
-    #
-    # data_sets = [
-    #     folds[1] + folds[2] + folds[3] + folds[4],
-    #     folds[0] + folds[2] + folds[3] + folds[4],
-    #     folds[0] + folds[1] + folds[3] + folds[4],
-    #     folds[0] + folds[1] + folds[2] + folds[4],
-    #     folds[0] + folds[1] + folds[2] + folds[3]
-    # ]
-    #
-    # max_f1 = 0
-    # max_f1_accuracy = 0
-    # max_f1_recall = 0
-    # max_f1_precision = 0
-    #
-    # learning_rate_test_set = [1, 0.1, 0.01, 0.001, 0.0001, 0.00001]
-    # balancer_test_set = [10, 1, 0.1, 0.01, 0.001, 0.0001]
-    #
-    # print("Starting svm:\n")
-    # for lr in learning_rate_test_set:
-    #     print("learning rate = " + str(lr))
-    #     for balancer_c in balancer_test_set:
-    #         print("\tbalancer = " + str(balancer_c))
-    #         f1_set = []
-    #         recall_set = []
-    #         precision_set = []
-    #         accuracies_set = []
-    #         for test_set_num, data_set in enumerate(data_sets):
-    #             print("\t\tcross validation = " + str(test_set_num))
-    #             split_svm = \
-    #                 Svm(data_set, dataTrain.max_variable)
-    #             weights = split_svm.run_svm(10, lr, balancer_c)
-    #             f1, precision, recall = get_classifier_stats(folds[test_set_num], weights)
-    #             f1_set.append(f1)
-    #             precision_set.append(precision)
-    #             recall_set.append(recall)
-    #             f1_set.append(f1)
-    #             accuracies_set.append(model_accuracy(folds[test_set_num], weights))
-    #             print("\t\t\taccuracy = " + str() + " F1 = " + str(f1))
-    #
-    #         average_f1 = avg(f1_set)
-    #         average_precision = avg(precision_set)
-    #         average_recall = avg(recall_set)
-    #         average_accuracy = avg(accuracies_set)
-    #
-    #         print("\t\tAverage: F1 = " + str(average_f1) + ", Precision = " + str(average_precision) + ", Recall = "
-    #               + str(average_recall) + ", Accuracy = " + str(average_accuracy))
-    #
-    #         if average_f1 > max_f1:
-    #             max_learning_rate = lr
-    #             max_balancer = balancer_c
-    #             max_f1 = average_f1
-    #             max_f1_accuracy = average_accuracy
-    #             max_f1_precision = average_precision
-    #             max_f1_recall = average_recall
-    #         elif average_f1 < (max_f1/3):
-    #             break
+    folds = dataTrain.create_cross_fold()
 
+    data_sets = [
+        folds[1] + folds[2] + folds[3] + folds[4],
+        folds[0] + folds[2] + folds[3] + folds[4],
+        folds[0] + folds[1] + folds[3] + folds[4],
+        folds[0] + folds[1] + folds[2] + folds[4],
+        folds[0] + folds[1] + folds[2] + folds[3]
+    ]
+
+    max_f1 = 0
+    max_f1_accuracy = 0
+    max_f1_recall = 0
+    max_f1_precision = 0
+
+    learning_rate_test_set = [0.00001, 0.000001, 0.0000001]
+    balancer_test_set = [10000, 1000, 100]
+
+    print("Starting svm:\n")
+    for lr in learning_rate_test_set:
+        print("learning rate = " + str(lr))
+        for balancer_c in balancer_test_set:
+            print("\tbalancer = " + str(balancer_c))
+            f1_set = []
+            recall_set = []
+            precision_set = []
+            accuracies_set = []
+            for test_set_num, data_set in enumerate(data_sets):
+                print("\t\tcross validation = " + str(test_set_num))
+                split_svm = \
+                    Svm(data_set, dataTrain.max_variable)
+                weights = split_svm.run_svm(2, lr, balancer_c)
+                f1, precision, recall = get_classifier_stats(folds[test_set_num], weights)
+                f1_set.append(f1)
+                precision_set.append(precision)
+                recall_set.append(recall)
+                f1_set.append(f1)
+                accuracy = model_accuracy(folds[test_set_num], weights)
+                accuracies_set.append(accuracy)
+                print("\t\t\taccuracy = " + str(accuracy) + " F1 = " + str(f1))
+
+            average_f1 = avg(f1_set)
+            average_precision = avg(precision_set)
+            average_recall = avg(recall_set)
+            average_accuracy = avg(accuracies_set)
+
+            print("\t\tAverage: F1 = " + str(average_f1) + ", Precision = " + str(average_precision) + ", Recall = "
+                  + str(average_recall) + ", Accuracy = " + str(average_accuracy))
+
+            if average_f1 > max_f1:
+                max_learning_rate = lr
+                max_balancer = balancer_c
+                max_f1 = average_f1
+                max_f1_accuracy = average_accuracy
+                max_f1_precision = average_precision
+                max_f1_recall = average_recall
+            elif average_f1 < (max_f1/3):
+                break
 
     print("Starting SVM: learning rate: " + str(max_learning_rate) + " Load Balancer: " + str(max_balancer))
     svm = Svm(dataTrain.raw_data, dataTrain.max_variable)

@@ -1,0 +1,162 @@
+learning rate = 1e-05
+	balancer = 10000
+		cross validation = 0
+					epoch Start Time Fri Dec 14 12:39:44 2018
+					epoch End Time Fri Dec 14 12:41:50 2018
+					epoch Start Time Fri Dec 14 12:41:50 2018
+					epoch End Time Fri Dec 14 12:44:02 2018
+			accuracy = 82.5 F1 = 0.8426541988850926
+		cross validation = 1
+					epoch Start Time Fri Dec 14 12:44:03 2018
+					epoch End Time Fri Dec 14 12:47:19 2018
+					epoch Start Time Fri Dec 14 12:47:19 2018
+					epoch End Time Fri Dec 14 12:51:03 2018
+			accuracy = 85.5 F1 = 0.8459086078639745
+		cross validation = 2
+					epoch Start Time Fri Dec 14 12:51:05 2018
+					epoch End Time Fri Dec 14 12:54:45 2018
+					epoch Start Time Fri Dec 14 12:54:45 2018
+					epoch End Time Fri Dec 14 12:58:26 2018
+			accuracy = 79.96 F1 = 0.8274199104374784
+		cross validation = 3
+					epoch Start Time Fri Dec 14 12:58:28 2018
+					epoch End Time Fri Dec 14 13:01:11 2018
+					epoch Start Time Fri Dec 14 13:01:11 2018
+					epoch End Time Fri Dec 14 13:03:13 2018
+			accuracy = 71.16 F1 = 0.7751792952915498
+		cross validation = 4
+					epoch Start Time Fri Dec 14 13:03:14 2018
+					epoch End Time Fri Dec 14 13:05:11 2018
+					epoch Start Time Fri Dec 14 13:05:11 2018
+					epoch End Time Fri Dec 14 13:07:21 2018
+			accuracy = 83.94 F1 = 0.8508266765744009
+		Average: F1 = 0.8283977378104993, Precision = 0.7632828757077886, Recall = 0.9204722446109994, Accuracy = 80.612
+	balancer = 1000
+		cross validation = 0
+					epoch Start Time Fri Dec 14 13:07:22 2018
+					epoch End Time Fri Dec 14 13:09:29 2018
+					epoch Start Time Fri Dec 14 13:09:29 2018
+					epoch End Time Fri Dec 14 13:11:37 2018
+			accuracy = 80.16 F1 = 0.7701575532900834
+		cross validation = 1
+					epoch Start Time Fri Dec 14 13:11:39 2018
+					epoch End Time Fri Dec 14 13:13:48 2018
+					epoch Start Time Fri Dec 14 13:13:48 2018
+					epoch End Time Fri Dec 14 13:16:00 2018
+			accuracy = 83.6 F1 = 0.8145635459068296
+		cross validation = 2
+					epoch Start Time Fri Dec 14 13:16:01 2018
+					epoch End Time Fri Dec 14 13:18:08 2018
+					epoch Start Time Fri Dec 14 13:18:08 2018
+					epoch End Time Fri Dec 14 13:20:18 2018
+			accuracy = 83.24000000000001 F1 = 0.849009009009009
+		cross validation = 3
+					epoch Start Time Fri Dec 14 13:20:19 2018
+					epoch End Time Fri Dec 14 13:22:24 2018
+					epoch Start Time Fri Dec 14 13:22:24 2018
+					epoch End Time Fri Dec 14 13:24:34 2018
+			accuracy = 81.62 F1 = 0.8390260991417061
+		cross validation = 4
+					epoch Start Time Fri Dec 14 13:24:35 2018
+					epoch End Time Fri Dec 14 13:26:39 2018
+					epoch Start Time Fri Dec 14 13:26:39 2018
+					epoch End Time Fri Dec 14 13:28:45 2018
+			accuracy = 84.78 F1 = 0.8588911552011866
+		Average: F1 = 0.826329472509763, Precision = 0.8341374688301402, Recall = 0.8424866854572926, Accuracy = 82.67999999999999
+	balancer = 100
+		cross validation = 0
+					epoch Start Time Fri Dec 14 13:28:46 2018
+					epoch End Time Fri Dec 14 13:30:47 2018
+					epoch Start Time Fri Dec 14 13:30:47 2018
+					epoch End Time Fri Dec 14 13:32:51 2018
+			accuracy = 82.60000000000001 F1 = 0.8074369189907038
+		cross validation = 1
+					epoch Start Time Fri Dec 14 13:32:52 2018
+					epoch End Time Fri Dec 14 13:34:57 2018
+					epoch Start Time Fri Dec 14 13:34:57 2018
+					epoch End Time Fri Dec 14 13:37:04 2018
+			accuracy = 82.1 F1 = 0.7890643412679708
+		cross validation = 2
+					epoch Start Time Fri Dec 14 13:37:05 2018
+					epoch End Time Fri Dec 14 13:39:09 2018
+					epoch Start Time Fri Dec 14 13:39:09 2018
+					epoch End Time Fri Dec 14 13:41:14 2018
+			accuracy = 87.0 F1 = 0.8749519045786841
+		cross validation = 3
+					epoch Start Time Fri Dec 14 13:41:15 2018
+					epoch End Time Fri Dec 14 13:43:17 2018
+					epoch Start Time Fri Dec 14 13:43:17 2018
+					epoch End Time Fri Dec 14 13:45:22 2018
+			accuracy = 83.22 F1 = 0.8510562755192616
+		cross validation = 4
+					epoch Start Time Fri Dec 14 13:45:23 2018
+					epoch End Time Fri Dec 14 13:47:31 2018
+					epoch Start Time Fri Dec 14 13:47:31 2018
+					epoch End Time Fri Dec 14 13:49:32 2018
+			accuracy = 85.26 F1 = 0.859645781755856
+		Average: F1 = 0.8364310444224952, Precision = 0.8577248877953714, Recall = 0.8338781767985264, Accuracy = 84.03599999999999
+learning rate = 1e-06
+	balancer = 10000
+		cross validation = 0
+					epoch Start Time Fri Dec 14 13:49:33 2018
+					epoch End Time Fri Dec 14 13:51:34 2018
+					epoch Start Time Fri Dec 14 13:51:34 2018
+					epoch End Time Fri Dec 14 13:53:36 2018
+			accuracy = 86.06 F1 = 0.8628762541806021
+		cross validation = 1
+					epoch Start Time Fri Dec 14 13:53:37 2018
+					epoch End Time Fri Dec 14 13:55:48 2018
+					epoch Start Time Fri Dec 14 13:55:48 2018
+					epoch End Time Fri Dec 14 13:57:48 2018
+			accuracy = 85.74 F1 = 0.8448313384113167
+		cross validation = 2
+					epoch Start Time Fri Dec 14 13:57:49 2018
+					epoch End Time Fri Dec 14 13:59:45 2018
+					epoch Start Time Fri Dec 14 13:59:45 2018
+					epoch End Time Fri Dec 14 14:01:40 2018
+			accuracy = 71.7 F1 = 0.7775506995755385
+		cross validation = 3
+					epoch Start Time Fri Dec 14 14:01:41 2018
+					epoch End Time Fri Dec 14 14:03:44 2018
+					epoch Start Time Fri Dec 14 14:03:44 2018
+					epoch End Time Fri Dec 14 14:05:45 2018
+			accuracy = 84.62 F1 = 0.8600036409976334
+		cross validation = 4
+					epoch Start Time Fri Dec 14 14:05:46 2018
+					epoch End Time Fri Dec 14 14:07:47 2018
+					epoch Start Time Fri Dec 14 14:07:47 2018
+					epoch End Time Fri Dec 14 14:09:48 2018
+			accuracy = 85.88 F1 = 0.8633900928792569
+		Average: F1 = 0.8417304052088695, Precision = 0.8072809017773428, Recall = 0.8957052739673402, Accuracy = 82.8
+	balancer = 1000
+		cross validation = 0
+					epoch Start Time Fri Dec 14 14:09:49 2018
+					epoch End Time Fri Dec 14 14:11:58 2018
+					epoch Start Time Fri Dec 14 14:11:58 2018
+					epoch End Time Fri Dec 14 14:14:11 2018
+			accuracy = 85.78 F1 = 0.852642487046632
+		cross validation = 1
+					epoch Start Time Fri Dec 14 14:14:12 2018
+					epoch End Time Fri Dec 14 14:16:18 2018
+					epoch Start Time Fri Dec 14 14:16:18 2018
+					epoch End Time Fri Dec 14 14:18:27 2018
+			accuracy = 82.16 F1 = 0.7901176470588235
+		cross validation = 2
+					epoch Start Time Fri Dec 14 14:18:28 2018
+					epoch End Time Fri Dec 14 14:20:33 2018
+					epoch Start Time Fri Dec 14 14:20:33 2018
+					epoch End Time Fri Dec 14 14:22:27 2018
+			accuracy = 86.86 F1 = 0.8744985673352436
+		cross validation = 3
+					epoch Start Time Fri Dec 14 14:22:28 2018
+					epoch End Time Fri Dec 14 14:24:28 2018
+					epoch Start Time Fri Dec 14 14:24:28 2018
+					epoch End Time Fri Dec 14 14:26:27 2018
+			accuracy = 85.56 F1 = 0.8670349907918969
+		cross validation = 4
+					epoch Start Time Fri Dec 14 14:26:28 2018
+					epoch End Time Fri Dec 14 14:28:21 2018
+					epoch Start Time Fri Dec 14 14:28:21 2018
+					epoch End Time Fri Dec 14 14:30:16 2018
+			accuracy = 86.18 F1 = 0.8664734299516907
+		Average: F1 = 0.8501534244368573, Precision = 0.8634658179569895, Recall = 0.8493185109405479, Accuracy = 85.308
