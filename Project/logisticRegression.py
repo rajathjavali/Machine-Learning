@@ -1,8 +1,8 @@
 import math
+import random
 import time
-
-import Perceptron.helper as helper
-import Project.dataParser as dtP
+from Project import dataParser as dtP
+from Project import helper
 
 
 def sigmoid(gamma):
@@ -84,43 +84,40 @@ class LogisticRegression:
     def __init__(self, data, max_variable):
         self.data = data
         self.max_variable = max_variable
-        self.weights = helper.random_weight_vector(max_variable)
+        self.weights = [0] * (max_variable + 1)
+        # self.weights = helper.random_weight_vector(max_variable)
 
-    def logistic_regression(self, data, learning_rate, seed, sigma):
-        random_data = helper.data_randomizer(data, seed)
+    def logistic_regression(self, data, lr, seed, sigma):
+        learning_rate = lr / seed
+        # random_data = helper.data_randomizer(data, seed)
         weight_modifier = 1 - (2 * learning_rate / sigma)
-        for index in random_data:
-            line = data[index]
+        random.seed(seed * 3)
+        random.shuffle(data)
+        # for index in random_data:
+        for line in data:
+            # line = data[index]
             WX = helper.vector_dict_multiply(self.weights, line)
             label = int(line["label"])
             if label == 0:
                 label = -1
 
-            try:
-                exponent_term = math.exp(label * WX)
-            except OverflowError:
-                exponent_term = float("Inf")
-
             self.weights = [weight_modifier * weight for weight in self.weights]
+            if WX*label <=1:
+                try:
+                    exponent_term = math.exp(label * WX)
+                except OverflowError:
+                    exponent_term = float("Inf")
 
-            for key, value in line.items():
-                if key == "label":
-                    self.weights[0] += learning_rate * label / (1 + math.exp(label))
-                    continue
-                self.weights[int(key)] += learning_rate * label * float(value) / (1 + exponent_term)
-
-            # for i in range(len(self.weights)):
-            #     if i == 0:
-            #         self.weights[0] += learning_rate * label / (1 + math.exp(label))
-            #     elif str(i) in line:
-            #         self.weights[i] += learning_rate * label * float(line[str(i)]) / (1 + exponent_term) \
-            #                            - 2 * learning_rate * self.weights[i] / sigma
+                for key, value in line.items():
+                    if key == "label":
+                        self.weights[0] += learning_rate * label / (1 + math.exp(label))
+                        continue
+                    self.weights[int(key)] += learning_rate * label * float(value) / (1 + exponent_term)
 
     def run_regression(self, epoch, learning_rate, sigma):
         for i in range(0, epoch):
             print("\t\t\t\t\tepoch Start Time", time.asctime())
-            epoch_learning_rate = learning_rate / (1 + epoch)
-            self.logistic_regression(self.data, epoch_learning_rate, i+1, sigma)
+            self.logistic_regression(self.data, learning_rate, i+1, sigma)
             print("\t\t\t\t\tepoch End Time", time.asctime())
 
         return self.weights
@@ -131,13 +128,14 @@ dataTest = dtP.DataParser("movie-ratings/data-splits/data.test")
 dataEval = dtP.DataParser("movie-ratings/data-splits/data.eval.anon")
 
 
-max_f1 = 0
-max_f1_accuracy = 0
-max_f1_recall = 0
-max_f1_precision = 0
-max_sigma = 1e5
-max_learning_rate = 0.1
+max_sigma = 1e3
+max_learning_rate = 1e-01
 
+# max_f1 = 0
+# max_f1_accuracy = 0
+# max_f1_recall = 0
+# max_f1_precision = 0
+#
 # folds = dataTrain.create_cross_fold()
 #
 # data_sets = [
@@ -189,7 +187,10 @@ resultFile = open("results.txt", "a")
 regression = LogisticRegression(dataTrain.raw_data, dataTrain.max_variable)
 weights = regression.run_regression(5, max_learning_rate, max_sigma)
 f1, precision, recall = get_classifier_stats(dataTest.raw_data, weights)
+train_accuracy = str(model_accuracy(dataTrain.raw_data, weights))
+print(train_accuracy)
 test_accuracy = str(model_accuracy(dataTest.raw_data, weights))
+
 print("\nStats:\nBalancer = " + str(max_sigma) + "\nlearning rate = " + str(max_learning_rate)
       + "\nF1 = " + str(f1) + "\nPrecision = " + str(precision) + "\nRecall = " + str(recall)
       + "\nAccuracy test data = " + test_accuracy)

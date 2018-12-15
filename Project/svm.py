@@ -1,7 +1,6 @@
-import Perceptron.helper as helper
-import Project.dataParser as dtP
-import numpy as np
 import time
+from Project import helper
+from Project import dataParser as dtP
 
 
 def count_mistakes(data, weights):

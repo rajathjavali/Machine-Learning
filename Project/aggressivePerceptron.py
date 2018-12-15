@@ -1,4 +1,4 @@
-import Perceptron.helper as helper
+from Project import helper
 
 
 def dict_square(data):

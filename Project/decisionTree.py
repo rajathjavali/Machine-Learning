@@ -1,7 +1,8 @@
 import time
-from enum import Enum
 import math
 import copy
+from enum import Enum
+from Project import dataParser as dtP
 
 
 class NodeType(Enum):
@@ -360,8 +361,6 @@ class DecisionTree:
         return decision
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ End Of Class LearnDT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-from Project import dataParser as dtP
 
 dataTrain = dtP.DataParser("movie-ratings/data-splits/data.train")
 dataTest = dtP.DataParser("movie-ratings/data-splits/data.test")

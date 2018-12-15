@@ -1,9 +1,8 @@
-import Project.dataParser as dtP
-import Project.perceptron as P
-import Project.aggressivePerceptron as aP
-import Perceptron.helper as helper
-import Project.decisionTree as dT
 import time
+from Project import helper
+from Project import dataParser as dtP
+from Project import perceptron as P
+from Project import aggressivePerceptron as aP
 
 
 def count_mistakes(data, weights):
@@ -70,8 +69,8 @@ resultFile.write(str(results) + "\n")
 # print("Acc Perceptron: " + str(accuracy))
 
 # print("Starting Aggressive Perceptron: Margin: 1")
-aggressive_perceptron = aP.AggressivePerceptron(dataTrain.raw_data, dataTrain.max_variable)
-weights = aggressive_perceptron.run_perceptron(10, 1)
+# aggressive_perceptron = aP.AggressivePerceptron(dataTrain.raw_data, dataTrain.max_variable)
+# weights = aggressive_perceptron.run_perceptron(10, 1)
 # accuracy = model_accuracy(dataTest.raw_data, weights)
 # print("Acc Perceptron: " + str(accuracy))
 # results = get_predictions(dataEval.raw_data, weights)

@@ -1,8 +1,6 @@
 import math
 import time
-
-import Perceptron.helper as helper
-import Project.dataParser as dtP
+from Project import dataParser as dtP
 
 
 def avg(vector):

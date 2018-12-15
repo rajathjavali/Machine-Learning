@@ -1,4 +1,6 @@
-import Perceptron.helper as helper
+import random
+
+from Project import helper
 
 
 def get_labels(data, weights):
@@ -92,10 +94,12 @@ class Perceptron:
     #   seed: to pseudo randomize the data set used for learning across epochs
     def perceptron(self, data, learning_rate, seed, counter):
         num_updates = 0
-        random_data = helper.data_randomizer(data, seed)
-        for index in random_data:
+        # random_data = helper.data_randomizer(data, seed)
+        random.shuffle(data)
+        # for index in random_data:
+        for line in data:
             counter += 1
-            line = data[index]
+            # line = data[index]
             WX = helper.vector_dict_multiply(self.weights, line)
             label = int(line["label"])
             if label == 0:

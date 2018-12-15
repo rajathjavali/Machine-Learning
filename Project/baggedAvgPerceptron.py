@@ -1,9 +1,8 @@
 import random
 import time
-
-import Project.dataParser as dtP
-import Project.perceptron as aP
-import Project.svm as SVM
+from Project import dataParser as dtP
+from Project import perceptron as aP
+from Project import svm as SVM
 
 
 def feature_transformation_averaged_perceptron(test_set, data_set, eval_set, num_treesperceptron, max_variable, learning_rate):
