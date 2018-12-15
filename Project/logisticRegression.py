@@ -54,6 +54,12 @@ def get_classifier_stats(data, weights):
     false_negative = 0
     if len(weights) != 0:
         output = get_predictions(data, weights)
+        mistakes = 0
+        for i in range(len(data)):
+            label = int(data[i]["label"])
+            if label != output[i]:
+                mistakes += 1
+
         for i, val in enumerate(output):
             if val == 1 and int(data[i]["label"]) == 1:
                 true_positive += 1
@@ -76,7 +82,7 @@ def get_classifier_stats(data, weights):
     if f1 > 0:
         f1 /= (precision + recall)
 
-    return f1, precision, recall
+    return f1, precision, recall, (1 - (mistakes/len(data))) * 100
 
 
 class LogisticRegression:
@@ -114,11 +120,13 @@ class LogisticRegression:
                         continue
                     self.weights[int(key)] += learning_rate * label * float(value) / (1 + exponent_term)
 
-    def run_regression(self, epoch, learning_rate, sigma):
+    def run_regression(self, epoch, learning_rate, sigma, test_set=None):
         for i in range(0, epoch):
-            print("\t\t\t\t\tepoch Start Time", time.asctime())
+            print("\t\tepoch Start Time", time.asctime())
             self.logistic_regression(self.data, learning_rate, i+1, sigma)
-            print("\t\t\t\t\tepoch End Time", time.asctime())
+            print("\t\tepoch End Time", time.asctime())
+            if test_set is not None:
+                print("epoch: " + str(i+1) + " accuracy: " + str(model_accuracy(test_set, self.weights)))
 
         return self.weights
 
@@ -128,7 +136,7 @@ dataTest = dtP.DataParser("movie-ratings/data-splits/data.test")
 dataEval = dtP.DataParser("movie-ratings/data-splits/data.eval.anon")
 
 
-max_sigma = 1e3
+max_sigma = 1e4
 max_learning_rate = 1e-01
 
 # max_f1 = 0
@@ -185,8 +193,8 @@ max_learning_rate = 1e-01
 #             max_f1_recall = average_recall
 resultFile = open("results.txt", "a")
 regression = LogisticRegression(dataTrain.raw_data, dataTrain.max_variable)
-weights = regression.run_regression(5, max_learning_rate, max_sigma)
-f1, precision, recall = get_classifier_stats(dataTest.raw_data, weights)
+weights = regression.run_regression(10, max_learning_rate, max_sigma, dataTest.raw_data)
+f1, precision, recall, accuracy = get_classifier_stats(dataTest.raw_data, weights)
 train_accuracy = str(model_accuracy(dataTrain.raw_data, weights))
 print(train_accuracy)
 test_accuracy = str(model_accuracy(dataTest.raw_data, weights))

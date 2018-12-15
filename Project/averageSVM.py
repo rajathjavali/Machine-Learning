@@ -120,7 +120,7 @@ class AverageSVM:
                         self.cached_weights[int(key)] += temp_value * counter
                 num_updates += 1
 
-        return num_updates
+        return num_updates, counter
 
     def run_svm(self, epoch, learning_rate, balancer_c):
         num_updates = []
@@ -128,7 +128,8 @@ class AverageSVM:
         for i in range(0, epoch):
             print("\t\t\t\t\tepoch Start Time", time.asctime())
             epoch_learning_rate = learning_rate / (1 + (i * learning_rate / balancer_c))
-            num_updates.append(self.average_svm(self.data, epoch_learning_rate, i+1, balancer_c, counter))
+            updates, counter = self.average_svm(self.data, epoch_learning_rate, i+1, balancer_c, counter)
+            num_updates.append(updates)
             print("\t\t\t\t\tepoch End Time", time.asctime())
 
         self.final_weight_vector = vector_subtraction(self.weights, const_div_vector(self.cached_weights, counter))
@@ -157,8 +158,8 @@ def cross_validation():
     dataTest = dtP.DataParser("movie-ratings/data-splits/data.test")
     dataEval = dtP.DataParser("movie-ratings/data-splits/data.eval.anon")
 
-    max_balancer = 1e3
-    max_learning_rate = 1e-06
+    max_balancer = 1e6
+    max_learning_rate = 1e-08
 
     # folds = dataTrain.create_cross_fold()
     #
@@ -219,9 +220,9 @@ def cross_validation():
     #         elif average_f1 < (max_f1/3):
     #             break
 
-    print("Starting SVM: learning rate: " + str(max_learning_rate) + " Load Balancer: " + str(max_balancer))
+    print("Starting average SVM: learning rate: " + str(max_learning_rate) + " Load Balancer: " + str(max_balancer))
     svm = AverageSVM(dataTrain.raw_data, dataTrain.max_variable)
-    weights = svm.run_svm(10, max_learning_rate, max_balancer)
+    weights = svm.run_svm(5, max_learning_rate, max_balancer)
     accuracy = model_accuracy(dataTest.raw_data, weights)
 
     f1, precision, recall = get_classifier_stats(dataTest.raw_data, weights)
@@ -231,8 +232,8 @@ def cross_validation():
     results = get_labels(dataEval.raw_data, weights)
 
     resultFile = open("results.txt", "a")
-    resultFile.write("SVM learning rate: " + str(max_learning_rate) + " Balancer: " + str(max_balancer) + " Accuracy: "
-                     + str(accuracy) + "\n")
+    resultFile.write("Average SVM learning rate: " + str(max_learning_rate) + " Balancer: " + str(max_balancer)
+                     + " Accuracy: " + str(accuracy) + "\n")
     resultFile.write(str(results) + "\n")
 
 
